@@ -1,15 +1,17 @@
 package com.epam.esm.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.Hibernate;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.math.BigInteger;
-import java.util.Objects;
+import java.util.List;
 
-@Getter
-@Setter
-@ToString
 @Entity
 @Table(name = "tags")
 public class Tag {
@@ -19,6 +21,11 @@ public class Tag {
     private BigInteger id;
     @Column(unique = true, nullable = false)
     private String name;
+    @ManyToMany
+    @JoinTable(name = "gift_certificates_tags",
+            joinColumns = @JoinColumn(name = "tags_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
+    private List<GiftCertificate> giftCertificates;
 
     public Tag() {
     }
@@ -27,16 +34,35 @@ public class Tag {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Tag tag = (Tag) o;
-        return getId() != null && Objects.equals(getId(), tag.getId());
+    public BigInteger getId() {
+        return id;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<GiftCertificate> getGiftCertificates() {
+        return giftCertificates;
+    }
+
+    public void setGiftCertificates(List<GiftCertificate> giftCertificates) {
+        this.giftCertificates = giftCertificates;
     }
 
     @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public String toString() {
+        return "Tag{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + '}';
     }
 }

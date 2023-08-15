@@ -1,36 +1,39 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.DataProcessingException;
+import com.epam.esm.lib.data.Page;
+import com.epam.esm.lib.data.Specification;
 import com.epam.esm.model.Tag;
+import com.epam.esm.model.User;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
+import com.epam.esm.specification.PaginationAndSortingHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Component
 @Service
 public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
+    private final PaginationAndSortingHandler paginationAndSortingHandler;
 
-    public TagServiceImpl(TagRepository tagRepository) {
+    public TagServiceImpl(TagRepository tagRepository, PaginationAndSortingHandler paginationAndSortingHandler) {
         this.tagRepository = tagRepository;
+        this.paginationAndSortingHandler = paginationAndSortingHandler;
     }
 
-    @Transactional
     @Override
     public Tag create(Tag tag) {
         return tagRepository.create(tag);
     }
 
-    @Transactional
     @Override
     public Tag update(Tag tag) {
-        if (tagRepository.update(tag) == null) {
-            throw new DataProcessingException("Can't update tag " + tag);
-        }
-        return get(tag.getId());
+        return tagRepository.update(tag);
     }
 
     @Override
@@ -45,12 +48,24 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAll() {
-        return tagRepository.getAll();
+    public Page<Tag> getAll(Map<String, String> params) {
+
+        return tagRepository.getAll(new Specification(), paginationAndSortingHandler.handle(params));
     }
 
     @Override
     public List<Tag> getByNames(List<String> names) {
         return tagRepository.getByNames(names);
+    }
+
+    @Override
+    public long count() {
+        return tagRepository.count();
+    }
+
+    @Override
+    public Tag getHiQualityTag(User user) {
+        return tagRepository.getHiQualityTag(user).orElseThrow(
+                () -> new DataProcessingException("Can't get hi-quality tag by user " + user));
     }
 }

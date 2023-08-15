@@ -1,9 +1,11 @@
 package com.epam.esm.service;
 
+import com.epam.esm.lib.data.Page;
 import com.epam.esm.model.Tag;
-
+import com.epam.esm.model.User;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 public interface TagService {
     Tag create(Tag tag);
@@ -14,7 +16,11 @@ public interface TagService {
 
     Tag get(BigInteger id);
 
-    List<Tag> getAll();
+    Page<Tag> getAll(Map<String, String> params);
 
     List<Tag> getByNames(List<String> names);
+
+    long count();
+
+    Tag getHiQualityTag(User user);
 }

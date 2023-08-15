@@ -1,9 +1,8 @@
 package com.epam.esm.specification.impl;
 
 import com.epam.esm.specification.SpecificationProvider;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Component;
-
-import java.util.StringJoiner;
 
 @Component
 public class TagNameSpecificationProvider
@@ -12,12 +11,8 @@ public class TagNameSpecificationProvider
     private static final String FIELD_NAME = "t.name";
 
     @Override
-    public String getSpecification(String[] tagNames) {
-        StringJoiner in = new StringJoiner(", ", FIELD_NAME + " IN (", ") ");
-        for (String tagName: tagNames) {
-            in.add("'" + tagName + "'");
-        }
-        return in.toString();
+    public Predicate getSpecification(String[] tagNames) {
+        return null;
     }
 
     @Override

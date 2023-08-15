@@ -3,6 +3,10 @@ package com.epam.esm.controller;
 import com.epam.esm.exception.DataProcessingException;
 import com.epam.esm.exception.ErrorCode;
 import com.epam.esm.exception.RequestException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +14,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
@@ -36,6 +36,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> handleAllException(Exception ex,
                                                   WebRequest request) {
+        System.out.println(Arrays.toString(ex.getStackTrace()));
         return handleExceptionInternal(ex,
                 getBody(HttpStatus.INTERNAL_SERVER_ERROR, ex, ErrorCode.DATA_PROCESSING),
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);

@@ -3,9 +3,9 @@ package com.epam.esm.repository.impl;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.repository.AbstractRepository;
 import com.epam.esm.repository.GiftCertificateRepository;
+import java.util.List;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository
 public class GiftCertificateRepositoryImpl extends AbstractRepository<GiftCertificate>

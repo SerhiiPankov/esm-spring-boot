@@ -1,7 +1,9 @@
 package com.epam.esm.specification;
 
+import jakarta.persistence.criteria.Predicate;
+
 public interface SpecificationProvider {
-    String getSpecification(String[] params);
+    Predicate getSpecification(String[] params);
 
     String getFilterKey();
 }
