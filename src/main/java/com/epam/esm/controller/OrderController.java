@@ -8,9 +8,7 @@ import com.epam.esm.service.OrderService;
 import com.epam.esm.service.ShoppingCartService;
 import com.epam.esm.service.UserService;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,9 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/user")
-    public Page<OrderResponseDto> getUserOrdersHistory(@RequestParam BigInteger userId,
-                                                       @RequestParam Map<String, String> params) {
-        User user = userService.get(userId);
-        return orderMapper.mapPageDto(orderService.getOrdersHistory(user, params));
+    public Page<OrderResponseDto> getOrdersHistory(@RequestParam Map<String, String> params) {
+        return orderMapper.mapPageDto(orderService.getOrdersHistory(params));
     }
 }

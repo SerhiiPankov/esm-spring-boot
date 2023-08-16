@@ -1,7 +1,6 @@
 package com.epam.esm.lib.data;
 
 import com.epam.esm.exception.RequestException;
-
 import java.util.Arrays;
 
 public class Sort {
@@ -35,7 +34,8 @@ public class Sort {
             return Arrays.stream(values())
                     .filter(o -> o.getValue().equals(value))
                     .findFirst()
-                    .orElseThrow(() -> new RequestException("Parameter sortBy Direction is not valid"));
+                    .orElseThrow(() ->
+                            new RequestException("Parameter sortBy Direction is not valid"));
         }
     }
 
@@ -43,15 +43,7 @@ public class Sort {
         return parameter;
     }
 
-    public void setParameter(String parameter) {
-        this.parameter = parameter;
-    }
-
     public Direction getDirection() {
         return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
     }
 }

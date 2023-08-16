@@ -3,7 +3,6 @@ package com.epam.esm.service;
 import com.epam.esm.lib.data.Page;
 import com.epam.esm.model.Role;
 import com.epam.esm.model.User;
-
 import java.util.Map;
 import java.util.Set;
 

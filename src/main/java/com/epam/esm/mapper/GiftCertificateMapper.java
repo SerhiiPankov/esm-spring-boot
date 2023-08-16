@@ -2,13 +2,12 @@ package com.epam.esm.mapper;
 
 import com.epam.esm.dto.GiftCertificateRequestDto;
 import com.epam.esm.dto.GiftCertificateResponseDto;
+import com.epam.esm.lib.data.Page;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Tag;
 import com.epam.esm.service.TagService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -31,6 +30,8 @@ public abstract class GiftCertificateMapper {
 
     public abstract GiftCertificateResponseDto mapToGiftCertificateResponseDto(
             GiftCertificate model);
+
+    public abstract Page<GiftCertificateResponseDto> mapPageDto(Page<GiftCertificate> page);
 
     @Named("mapTags")
     protected List<Tag> mapTags(List<String> tags) {

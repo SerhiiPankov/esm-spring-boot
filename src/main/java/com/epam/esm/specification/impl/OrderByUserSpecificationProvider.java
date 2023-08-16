@@ -1,29 +1,28 @@
 package com.epam.esm.specification.impl;
 
-import com.epam.esm.model.GiftCertificate;
-import com.epam.esm.model.Tag;
+import com.epam.esm.model.Order;
+import com.epam.esm.model.User;
 import com.epam.esm.specification.SpecificationProvider;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.math.BigInteger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TagNameSpecificationProvider
-        implements SpecificationProvider<GiftCertificate> {
-    private static final String FILTER_KEY = "tagName";
-    private static final String FIELD_NAME = "tags";
+public class OrderByUserSpecificationProvider implements SpecificationProvider<Order> {
+    private static final String FILTER_KEY = "user";
+    private static final String FIELD_NAME_USER = "user";
 
     @Override
-    public Predicate getSpecification(String[] params,
-                                      Root<GiftCertificate> root,
+    public Predicate getSpecification(String[] params, Root<Order> root,
                                       CriteriaBuilder criteriaBuilder) {
-        Join<GiftCertificate, Tag> tagsJoin = root.join(FIELD_NAME, JoinType.LEFT);
-        CriteriaBuilder.In<String> predicateIn = criteriaBuilder.in(tagsJoin.get("name"));
+        Join<Order, User> userJoin = root.join(FIELD_NAME_USER, JoinType.LEFT);
+        CriteriaBuilder.In<BigInteger> predicateIn = criteriaBuilder.in(userJoin.get("id"));
         for (String value: params) {
-            predicateIn.value(value);
+            predicateIn.value(BigInteger.valueOf(Long.parseLong(value)));
         }
         return predicateIn;
     }

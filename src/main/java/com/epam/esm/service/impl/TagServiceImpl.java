@@ -2,16 +2,15 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.DataProcessingException;
 import com.epam.esm.lib.data.Page;
-import com.epam.esm.lib.data.Specification;
 import com.epam.esm.model.Tag;
 import com.epam.esm.model.User;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.TagService;
+import com.epam.esm.specification.PaginationAndSortingHandler;
+import com.epam.esm.specification.ParameterParser;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
-
-import com.epam.esm.specification.PaginationAndSortingHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +19,14 @@ import org.springframework.stereotype.Service;
 public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
     private final PaginationAndSortingHandler paginationAndSortingHandler;
+    private final ParameterParser parameterParser;
 
-    public TagServiceImpl(TagRepository tagRepository, PaginationAndSortingHandler paginationAndSortingHandler) {
+    public TagServiceImpl(TagRepository tagRepository,
+                          PaginationAndSortingHandler paginationAndSortingHandler,
+                          ParameterParser parameterParser) {
         this.tagRepository = tagRepository;
         this.paginationAndSortingHandler = paginationAndSortingHandler;
+        this.parameterParser = parameterParser;
     }
 
     @Override
@@ -49,8 +52,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Page<Tag> getAll(Map<String, String> params) {
-
-        return tagRepository.getAll(new Specification(), paginationAndSortingHandler.handle(params));
+        return tagRepository.getAll(parameterParser.parseParameters(params),
+                paginationAndSortingHandler.handle(params));
     }
 
     @Override

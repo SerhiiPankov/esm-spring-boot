@@ -8,7 +8,6 @@ import com.epam.esm.repository.TagRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import org.hibernate.Session;
@@ -18,8 +17,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TagRepositoryImpl extends AbstractRepository<Tag> implements TagRepository {
+
     public TagRepositoryImpl(SessionFactory factory) {
-        super(factory, Tag.class);
+        super(factory, Tag.class, null);
     }
 
     @Override

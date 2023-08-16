@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public class ShoppingCartRepositoryImpl extends AbstractRepository<ShoppingCart>
         implements ShoppingCartRepository {
     public ShoppingCartRepositoryImpl(SessionFactory factory) {
-        super(factory, ShoppingCart.class);
+        super(factory, ShoppingCart.class, null);
     }
 
     @Override

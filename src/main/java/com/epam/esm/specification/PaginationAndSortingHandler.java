@@ -1,11 +1,11 @@
 package com.epam.esm.specification;
 
 import com.epam.esm.exception.RequestException;
-
-import java.util.*;
-
 import com.epam.esm.lib.data.Pagination;
 import com.epam.esm.lib.data.Sort;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -39,19 +39,25 @@ public class PaginationAndSortingHandler {
     private List<Sort> getSort(Map<String, String> params) {
         String sortBy = params.get(fields[2]);
         List<Sort> orders = new ArrayList<>();
-        if (sortBy.contains(":")) {
+        if (sortBy.contains(";")) {
             String[] sortingField = sortBy.split(";");
             for (String field : sortingField) {
-                if (field.contains(":")) {
-                    String[] fieldAndDirection = field.split(":");
-                    orders.add(new Sort(fieldAndDirection[0],
-                            Sort.Direction.getDirection(fieldAndDirection[1].toUpperCase())));
-                } else {
-                    orders.add(new Sort(field, Sort.Direction.ASC));
-                }
+                addSort(field, orders);
             }
+        } else {
+            addSort(sortBy, orders);
         }
         return orders;
+    }
+
+    private void addSort(String field, List<Sort> orders) {
+        if (field.contains(":")) {
+            String[] fieldAndDirection = field.split(":");
+            orders.add(new Sort(fieldAndDirection[0],
+                    Sort.Direction.getDirection(fieldAndDirection[1].toUpperCase())));
+        } else {
+            orders.add(new Sort(field, Sort.Direction.ASC));
+        }
     }
 
     public String[] getFields() {

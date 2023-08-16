@@ -2,18 +2,15 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.exception.DataProcessingException;
 import com.epam.esm.lib.data.Page;
-import com.epam.esm.lib.data.Specification;
 import com.epam.esm.model.Order;
 import com.epam.esm.model.ShoppingCart;
-import com.epam.esm.model.User;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.ShoppingCartService;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-
 import com.epam.esm.specification.PaginationAndSortingHandler;
+import com.epam.esm.specification.ParameterParser;
+import java.time.LocalDateTime;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,12 +18,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ShoppingCartService shoppingCartService;
     private final PaginationAndSortingHandler paginationAndSortingHandler;
+    private final ParameterParser parameterParser;
 
     public OrderServiceImpl(OrderRepository orderRepository,
-                            ShoppingCartService shoppingCartService, PaginationAndSortingHandler paginationAndSortingHandler) {
+                            ShoppingCartService shoppingCartService,
+                            PaginationAndSortingHandler paginationAndSortingHandler,
+                            ParameterParser parameterParser) {
         this.orderRepository = orderRepository;
         this.shoppingCartService = shoppingCartService;
         this.paginationAndSortingHandler = paginationAndSortingHandler;
+        this.parameterParser = parameterParser;
     }
 
     @Override
@@ -46,11 +47,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> getOrdersHistory(User user, Map<String, String> params) {
-
-
-
-
-        return orderRepository.getAll(new Specification(), paginationAndSortingHandler.handle(params));
+    public Page<Order> getOrdersHistory(Map<String, String> params) {
+        return orderRepository.getAll(parameterParser.parseParameters(params),
+                paginationAndSortingHandler.handle(params));
     }
 }

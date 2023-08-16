@@ -1,8 +1,8 @@
 package com.epam.esm.service;
 
+import com.epam.esm.lib.data.Page;
 import com.epam.esm.model.GiftCertificate;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Map;
 
 public interface GiftCertificateService {
@@ -14,5 +14,5 @@ public interface GiftCertificateService {
 
     GiftCertificate get(BigInteger id);
 
-    List<GiftCertificate> getAllByParameters(Map<String, String> params);
+    Page<GiftCertificate> getAllByParameters(Map<String, String> params);
 }

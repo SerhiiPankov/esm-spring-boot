@@ -2,13 +2,12 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateRequestDto;
 import com.epam.esm.dto.GiftCertificateResponseDto;
+import com.epam.esm.lib.data.Page;
 import com.epam.esm.mapper.GiftCertificateMapper;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,9 +59,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public List<GiftCertificateResponseDto> getAll(@RequestParam Map<String, String> params) {
-        return certificateService.getAllByParameters(params).stream()
-                .map(giftCertificateMapper::mapToGiftCertificateResponseDto)
-                .collect(Collectors.toList());
+    public Page<GiftCertificateResponseDto> getAll(@RequestParam Map<String, String> params) {
+        return giftCertificateMapper.mapPageDto(certificateService.getAllByParameters(params));
     }
 }

@@ -6,16 +6,16 @@ public class Page<T> {
     private List<T> page;
     private Long totalRecords;
     private int numberPage;
-    private int numberRecords;
+    private int numberRecordsPerPage;
 
     public Page() {
     }
 
-    public Page(List<T> page, Long totalRecords, int numberPage, int numberRecords) {
+    public Page(List<T> page, Long totalRecords, int numberPage, int numberRecordsPerPage) {
         this.page = page;
         this.totalRecords = totalRecords;
         this.numberPage = numberPage;
-        this.numberRecords = numberRecords;
+        this.numberRecordsPerPage = numberRecordsPerPage;
     }
 
     public List<T> getPage() {
@@ -42,11 +42,11 @@ public class Page<T> {
         this.numberPage = numberPage;
     }
 
-    public int getNumberRecords() {
-        return numberRecords;
+    public int getNumberRecordsPerPage() {
+        return numberRecordsPerPage;
     }
 
-    public void setNumberRecords(int numberRecords) {
-        this.numberRecords = numberRecords;
+    public void setNumberRecordsPerPage(int numberRecordsPerPage) {
+        this.numberRecordsPerPage = numberRecordsPerPage;
     }
 }

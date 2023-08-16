@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RoleRepositoryImpl extends AbstractRepository<Role> implements RoleRepository {
     public RoleRepositoryImpl(SessionFactory factory) {
-        super(factory, Role.class);
+        super(factory, Role.class, null);
     }
 
     @Override
