@@ -23,5 +23,5 @@ public interface TagRepository {
 
     long count();
 
-    Optional<Tag> getHiQualityTag(User user);
+    Page<Tag> getHiQualityTag(User user, Pagination pagination);
 }

@@ -67,8 +67,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getHiQualityTag(User user) {
-        return tagRepository.getHiQualityTag(user).orElseThrow(
-                () -> new DataProcessingException("Can't get hi-quality tag by user " + user));
+    public Page<Tag> getTopTag(User user, Map<String, String> params) {
+        return tagRepository.getHiQualityTag(user, paginationAndSortingHandler.handle(params));
     }
 }

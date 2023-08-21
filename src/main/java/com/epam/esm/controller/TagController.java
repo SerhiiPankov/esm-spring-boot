@@ -65,10 +65,10 @@ public class TagController {
         return tagMapper.mapPageDto(tagService.getAll(params));
     }
 
-    @GetMapping("/hi-quality-tag")
-    public TagResponseDto hiQualityTagByUser(@RequestParam BigInteger userId) {
+    @GetMapping("/top-tag")
+    public Page<TagResponseDto> getTopTag(@RequestParam BigInteger userId,
+                                          @RequestParam Map<String, String> params) {
         User user = userService.get(userId);
-        Tag tag = tagService.getHiQualityTag(user);
-        return tagMapper.mapToTagResponseDto(tag);
+        return tagMapper.mapPageDto(tagService.getTopTag(user, params));
     }
 }

@@ -21,11 +21,14 @@ public abstract class GiftCertificateMapper {
     protected TagService tagService;
     @Autowired
     protected TagMapper tagMapper;
+    @Autowired
+    protected OrderMapper orderMapper;
 
     @Mapping(source = "tags", target = "tags", qualifiedByName = "mapTags")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createDate", ignore = true)
     @Mapping(target = "lastUpdateDate", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     public abstract GiftCertificate mapToGiftCertificate(GiftCertificateRequestDto dto);
 
     public abstract GiftCertificateResponseDto mapToGiftCertificateResponseDto(

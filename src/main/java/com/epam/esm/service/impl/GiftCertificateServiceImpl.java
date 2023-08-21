@@ -4,7 +4,6 @@ import com.epam.esm.exception.DataProcessingException;
 import com.epam.esm.lib.data.Page;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.specification.PaginationAndSortingHandler;
 import com.epam.esm.specification.ParameterParser;

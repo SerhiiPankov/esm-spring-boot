@@ -11,10 +11,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import java.util.List;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name = "tags")
-public class Tag {
+public class Tag extends RepresentationModel<Tag> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "BIGINT")
@@ -48,10 +49,6 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<GiftCertificate> getGiftCertificates() {
-        return giftCertificates;
     }
 
     public void setGiftCertificates(List<GiftCertificate> giftCertificates) {

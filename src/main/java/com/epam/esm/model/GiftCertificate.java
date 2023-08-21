@@ -39,6 +39,11 @@ public class GiftCertificate {
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tags_id"))
     private List<Tag> tags;
+    @ManyToMany
+    @JoinTable(name = "orders_gift_certificates",
+            joinColumns = @JoinColumn(name = "gift_certificate_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private List<Order> orders;
 
     public BigInteger getId() {
         return id;
@@ -102,6 +107,14 @@ public class GiftCertificate {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class GiftCertificateResponseDto {
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
     private List<TagResponseDto> tags;
+    private List<OrderResponseDto> orders;
 
     public BigInteger getId() {
         return id;
@@ -77,5 +78,13 @@ public class GiftCertificateResponseDto {
 
     public void setTags(List<TagResponseDto> tags) {
         this.tags = tags;
+    }
+
+    public List<OrderResponseDto> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderResponseDto> orders) {
+        this.orders = orders;
     }
 }

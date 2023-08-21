@@ -9,6 +9,7 @@ import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Role;
 import com.epam.esm.model.User;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.OrderService;
 import com.epam.esm.service.RoleService;
 import com.epam.esm.service.ShoppingCartService;
 import com.epam.esm.service.TagService;
@@ -30,11 +31,15 @@ public class DataInitializer {
     private static final String USER_ROLE_NAME = "USER";
     private static final String API_RANDOM_USER = "https://randomuser.me/api/?inc=email,login&noinfo&results=";
     private static final String API_RANDOM_WORD = "https://random-word-api.herokuapp.com/word?number=";
-    private static final int COUNT_OF_USERS = 20;
-    private static final int COUNT_OF_GIFT_CERTIFICATE = 20;
+    private static final int NUMBER_OF_USERS = 100;
+    private static final int NUMBER_OF_GIFT_CERTIFICATE = 200;
+    private static final int MAX_NUMBER_OF_EXISTING_TAGS_PER_GIFT_CERTIFICATE = 5;
+    private static final int MAX_NUMBER_OF_NEW_TAGS_PER_GIFT_CERTIFICATE = 5;
+    private static final int MAX_DURATION = 356;
     private static final Random RANDOM = new Random();
     private final GiftCertificateMapper giftCertificateMapper;
     private final GiftCertificateService giftCertificateService;
+    private final OrderService orderService;
     private final ShoppingCartService shoppingCartService;
     private final TagService tagService;
     private final RoleService roleService;
@@ -43,6 +48,7 @@ public class DataInitializer {
 
     public DataInitializer(GiftCertificateService giftCertificateService,
                            GiftCertificateMapper giftCertificateMapper,
+                           OrderService orderService,
                            ShoppingCartService shoppingCartService,
                            TagService tagService,
                            RoleService roleService,
@@ -50,6 +56,7 @@ public class DataInitializer {
                            HttpClient httpClient) {
         this.giftCertificateService = giftCertificateService;
         this.giftCertificateMapper = giftCertificateMapper;
+        this.orderService = orderService;
         this.shoppingCartService = shoppingCartService;
         this.tagService = tagService;
         this.roleService = roleService;
@@ -90,13 +97,13 @@ public class DataInitializer {
 
     public void injectUsers() {
         Set<UserApiResultsDto> userApiResultsDtoSet = new HashSet<>();
-        while (userApiResultsDtoSet.size() < COUNT_OF_USERS) {
+        while (userApiResultsDtoSet.size() < NUMBER_OF_USERS) {
             userApiResultsDtoSet.addAll(Arrays.stream(
-                    httpClient.get(API_RANDOM_USER + COUNT_OF_USERS, UserApiResponseDto.class)
+                    httpClient.get(API_RANDOM_USER + NUMBER_OF_USERS, UserApiResponseDto.class)
                             .getResults()).collect(Collectors.toSet()));
         }
         List<UserApiResultsDto> userApiResultsDtoList = new ArrayList<>(userApiResultsDtoSet);
-        for (int i = 0; i < COUNT_OF_USERS; i++) {
+        for (int i = 0; i < NUMBER_OF_USERS; i++) {
             UserApiResultsDto userApiResultsDto = userApiResultsDtoList.get(i);
             userService.register(userApiResultsDto.getEmail(),
                     userApiResultsDto.getLogin().getPassword(),
@@ -105,8 +112,8 @@ public class DataInitializer {
     }
 
     public void injectGiftCertificates() {
-        List<String> listUniqueWords = getListUniqueWords(COUNT_OF_GIFT_CERTIFICATE * 2 + 1);
-        for (int i = 1; i <= COUNT_OF_GIFT_CERTIFICATE * 2; i = i + 2) {
+        List<String> listUniqueWords = getListUniqueWords(NUMBER_OF_GIFT_CERTIFICATE * 2 + 1);
+        for (int i = 1; i <= NUMBER_OF_GIFT_CERTIFICATE * 2; i = i + 2) {
             GiftCertificateRequestDto randomGiftCertificate =
                     getRandomGiftCertificate(listUniqueWords.get(i), listUniqueWords.get(i + 1));
             giftCertificateService.create(
@@ -115,14 +122,20 @@ public class DataInitializer {
     }
 
     public void injectRelationshipsShoppingCartWithGiftCertificates() {
-        for (int i = 3; i < COUNT_OF_USERS + 3; i++) {
+        for (int i = 3; i < NUMBER_OF_USERS + 3; i++) {
             User user = userService.get(i);
             int numberOfGiftCertificates = RANDOM.nextInt(5 - 1) + 1;
             for (int j = 1; j <= numberOfGiftCertificates; j++) {
                 GiftCertificate giftCertificate = giftCertificateService.get(
-                        BigInteger.valueOf(RANDOM.nextLong(COUNT_OF_GIFT_CERTIFICATE - 1) + 1));
+                        BigInteger.valueOf(RANDOM.nextLong(NUMBER_OF_GIFT_CERTIFICATE - 1) + 1));
                 shoppingCartService.addGiftCertificate(giftCertificate, user);
             }
+        }
+    }
+
+    public void injectCompletedOrders() {
+        for (int i = 3; i < NUMBER_OF_USERS + 3; i++) {
+            orderService.completeOrder(shoppingCartService.getByUser(userService.get(i)));
         }
     }
 
@@ -141,10 +154,10 @@ public class DataInitializer {
         giftCertificateRequestDto.setName(name);
         giftCertificateRequestDto.setDescription(description);
         giftCertificateRequestDto.setPrice(BigDecimal.valueOf(RANDOM.nextDouble(9999.99)));
-        giftCertificateRequestDto.setDuration(RANDOM.nextInt(356 - 1) + 1);
+        giftCertificateRequestDto.setDuration(RANDOM.nextInt(MAX_DURATION - 1) + 1);
 
         List<String> strings = new ArrayList<>(Arrays.stream(getRandomWord(
-                RANDOM.nextInt(3 - 1) + 1)).toList());
+                RANDOM.nextInt(MAX_NUMBER_OF_NEW_TAGS_PER_GIFT_CERTIFICATE - 1) + 1)).toList());
         strings.addAll(getExistingTagName());
         giftCertificateRequestDto.setTags(strings);
         return giftCertificateRequestDto;
@@ -154,7 +167,8 @@ public class DataInitializer {
         List<String> existingTagNames = new ArrayList<>();
         long count = tagService.count();
         if (count > 1) {
-            for (int i = 0; i < RANDOM.nextInt(6 - 1) + 1; i++) {
+            for (int i = 0; i < RANDOM.nextInt(
+                    MAX_NUMBER_OF_EXISTING_TAGS_PER_GIFT_CERTIFICATE - 1) + 1; i++) {
                 existingTagNames.add(tagService.get(BigInteger.valueOf(
                         RANDOM.nextLong(count - 1) + 1)).getName());
             }

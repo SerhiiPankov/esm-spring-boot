@@ -22,5 +22,5 @@ public interface TagService {
 
     long count();
 
-    Tag getHiQualityTag(User user);
+    Page<Tag> getTopTag(User user, Map<String, String> params);
 }

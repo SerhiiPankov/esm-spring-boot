@@ -45,10 +45,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -66,7 +62,6 @@ public class User {
         return "User{"
                 + "id=" + id
                 + ", email='" + email + '\''
-                + ", password='" + password + '\''
                 + ", roles=" + roles
                 + '}';
     }

@@ -24,6 +24,7 @@ public class InjectController {
         dataInitializer.injectUsers();
         dataInitializer.injectGiftCertificates();
         dataInitializer.injectRelationshipsShoppingCartWithGiftCertificates();
+        dataInitializer.injectCompletedOrders();
         return messageMapper.mapToTagResponseDto(" Users were injected, "
                 + " certificate was injected.");
     }
