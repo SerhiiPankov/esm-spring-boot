@@ -35,7 +35,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag update(Tag tag) {
+    public Tag update(BigInteger tagId, Tag tag) {
+        tag.setId(tagId);
         return tagRepository.update(tag);
     }
 

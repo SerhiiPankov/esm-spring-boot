@@ -9,6 +9,7 @@ import com.epam.esm.service.OrderService;
 import com.epam.esm.service.ShoppingCartService;
 import com.epam.esm.specification.PaginationAndSortingHandler;
 import com.epam.esm.specification.ParameterParser;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> getOrdersHistory(Map<String, String> params) {
+    public Page<Order> getOrdersHistory(BigInteger userId, Map<String, String> params) {
+        params.put("userId", userId.toString());
         return orderRepository.getAll(parameterParser.parseParameters(params),
                 paginationAndSortingHandler.handle(params));
     }

@@ -15,7 +15,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
+@Audited
+@AuditTable("orders_audit")
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -29,6 +34,8 @@ public class Order {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "orders_gift_certificates",
             joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
+    @AuditJoinTable(name = "orders_gift_certificates_audit",
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
     private List<GiftCertificate> giftCertificates;
     @Column(name = "total_price")
@@ -74,5 +81,16 @@ public class Order {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{"
+                + "id=" + id
+                + ", user=" + user
+                + ", giftCertificates=" + giftCertificates
+                + ", totalPrice=" + totalPrice
+                + ", purchaseDate=" + purchaseDate
+                + '}';
     }
 }

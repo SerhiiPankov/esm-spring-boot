@@ -10,7 +10,7 @@ import java.util.Map;
 public interface TagService {
     Tag create(Tag tag);
 
-    Tag update(Tag tag);
+    Tag update(BigInteger tagId, Tag tag);
 
     void delete(BigInteger id);
 

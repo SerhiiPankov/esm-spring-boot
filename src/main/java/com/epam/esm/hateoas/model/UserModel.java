@@ -1,9 +1,11 @@
-package com.epam.esm.dto;
+package com.epam.esm.hateoas.model;
 
+import com.epam.esm.dto.RoleResponseDto;
 import java.math.BigInteger;
 import java.util.Set;
+import org.springframework.hateoas.RepresentationModel;
 
-public class UserResponseDto {
+public class UserModel extends RepresentationModel<UserModel> {
     private BigInteger id;
     private String email;
     private Set<RoleResponseDto> roles;

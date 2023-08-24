@@ -15,7 +15,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
+@Audited
+@AuditTable("gift_certificates_audit")
 @Entity
 @Table(name = "gift_certificates")
 public class GiftCertificate {
@@ -38,8 +44,11 @@ public class GiftCertificate {
     @JoinTable(name = "gift_certificates_tags",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tags_id"))
+    @AuditJoinTable(name = "gift_certificates_tags_audit",
+            inverseJoinColumns = @JoinColumn(name = "tags_id"))
     private List<Tag> tags;
-    @ManyToMany
+    @NotAudited
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "orders_gift_certificates",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))

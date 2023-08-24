@@ -22,8 +22,8 @@ public class ShoppingCartRepositoryImpl extends AbstractRepository<ShoppingCart>
         try (Session session = factory.openSession()) {
             Query<ShoppingCart> getByUser = session.createQuery(
                     "SELECT sc FROM ShoppingCart sc "
-                            + "left join fetch sc.giftCertificates t "
-                            + "WHERE sc.user = :user", ShoppingCart.class);
+                            + " LEFT JOIN FETCH sc.giftCertificates gc "
+                            + " WHERE sc.user = :user", ShoppingCart.class);
             getByUser.setParameter("user", user);
             return getByUser.getSingleResult();
         } catch (Exception e) {

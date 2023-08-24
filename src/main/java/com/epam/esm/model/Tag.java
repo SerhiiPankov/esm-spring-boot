@@ -11,17 +11,22 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import java.util.List;
-import org.springframework.hateoas.RepresentationModel;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
+@Audited
+@AuditTable("tags_audit")
 @Entity
 @Table(name = "tags")
-public class Tag extends RepresentationModel<Tag> {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "BIGINT")
     private BigInteger id;
     @Column(unique = true, nullable = false)
     private String name;
+    @NotAudited
     @ManyToMany
     @JoinTable(name = "gift_certificates_tags",
             joinColumns = @JoinColumn(name = "tags_id"),

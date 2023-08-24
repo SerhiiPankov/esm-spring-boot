@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderByUserSpecificationProvider implements SpecificationProvider<Order> {
-    private static final String FILTER_KEY = "user";
+    private static final String FILTER_KEY = "userId";
     private static final String FIELD_NAME_USER = "user";
 
     @Override

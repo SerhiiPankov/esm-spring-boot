@@ -13,13 +13,19 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
+@Audited
+@AuditTable("shopping_carts_audit")
 @Entity
 @Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id
     @Column(columnDefinition = "BIGINT")
     private BigInteger id;
+    @NotAudited
     @ManyToMany
     @JoinTable(name = "shopping_carts_gift_certificates",
             joinColumns = @JoinColumn(name = "shopping_cart_id"),
@@ -62,5 +68,15 @@ public class ShoppingCart {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{"
+                + "id=" + id
+                + ", giftCertificates=" + giftCertificates
+                + ", totalPrice=" + totalPrice
+                + ", user=" + user
+                + '}';
     }
 }

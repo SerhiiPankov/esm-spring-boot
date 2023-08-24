@@ -10,7 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import java.util.Objects;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
+@Audited
+@AuditTable("roles_audit")
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -40,7 +44,7 @@ public class Role {
 
     public enum RoleName {
         ADMIN,
-        USER;
+        USER
     }
 
     @Override

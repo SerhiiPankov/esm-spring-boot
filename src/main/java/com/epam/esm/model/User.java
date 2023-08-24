@@ -12,7 +12,13 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
 import java.util.Set;
+import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
+@Audited
+@AuditTable("users_audit")
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,10 +28,13 @@ public class User {
     private BigInteger id;
     @Column(unique = true)
     private String email;
+    @NotAudited
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @AuditJoinTable(name = "users_roles_audit",
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 

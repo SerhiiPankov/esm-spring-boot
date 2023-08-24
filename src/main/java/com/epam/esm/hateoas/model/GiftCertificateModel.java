@@ -1,12 +1,13 @@
-package com.epam.esm.dto;
+package com.epam.esm.hateoas.model;
 
+import com.epam.esm.dto.TagResponseDto;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.hateoas.RepresentationModel;
 
-public class GiftCertificateResponseDto extends RepresentationModel<GiftCertificateResponseDto> {
+public class GiftCertificateModel extends RepresentationModel<GiftCertificateModel> {
     private BigInteger id;
     private String name;
     private String description;

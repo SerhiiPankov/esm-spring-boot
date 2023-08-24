@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,13 +19,9 @@ public class ParameterParser {
     public List<Parameter> parseParameters(Map<String, String> params) {
         List<String> ignoreParams = new ArrayList<>();
         Collections.addAll(ignoreParams, paginationAndSortingHandler.getFields());
-        List<Parameter> filterParams = new ArrayList<>();
-        for (Map.Entry<String, String> param: params.entrySet()) {
-            if (!ignoreParams.contains(param.getKey())) {
-                filterParams.add(
-                        new Parameter(param.getKey(), param.getValue().split(",")));
-            }
-        }
-        return filterParams;
+        return params.entrySet().stream()
+                .filter(p -> !ignoreParams.contains(p.getKey()))
+                .map(p -> new Parameter(p.getKey(), p.getValue().split(",")))
+                .collect(Collectors.toList());
     }
 }
