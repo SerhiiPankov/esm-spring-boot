@@ -1,6 +1,7 @@
 package com.epam.esm.initializer;
 
 import com.epam.esm.dto.GiftCertificateRequestDto;
+import com.epam.esm.exception.AuthenticationException;
 import com.epam.esm.exception.DataProcessingException;
 import com.epam.esm.initializer.dto.UserApiResponseDto;
 import com.epam.esm.initializer.dto.UserApiResultsDto;
@@ -31,10 +32,10 @@ public class DataInitializer {
     private static final String USER_ROLE_NAME = "USER";
     private static final String API_RANDOM_USER = "https://randomuser.me/api/?inc=email,login&noinfo&results=";
     private static final String API_RANDOM_WORD = "https://random-word-api.herokuapp.com/word?number=";
-    private static final int NUMBER_OF_USERS = 100;
-    private static final int NUMBER_OF_GIFT_CERTIFICATE = 200;
-    private static final int MAX_NUMBER_OF_EXISTING_TAGS_PER_GIFT_CERTIFICATE = 5;
-    private static final int MAX_NUMBER_OF_NEW_TAGS_PER_GIFT_CERTIFICATE = 5;
+    private static final int NUMBER_OF_USERS = 2;
+    private static final int NUMBER_OF_GIFT_CERTIFICATE = 2;
+    private static final int MAX_NUMBER_OF_EXISTING_TAGS_PER_GIFT_CERTIFICATE = 2;
+    private static final int MAX_NUMBER_OF_NEW_TAGS_PER_GIFT_CERTIFICATE = 2;
     private static final int MAX_DURATION = 356;
     private static final Random RANDOM = new Random();
     private final GiftCertificateMapper giftCertificateMapper;
@@ -85,12 +86,12 @@ public class DataInitializer {
         try {
             User admin = userService.register(
                     "admin@gmail.com", "12345678", Set.of(adminRole, userRole));
-        } catch (DataProcessingException e) {
+        } catch (AuthenticationException e) {
             System.out.println("Admin was added earlier");
         }
         try {
             User user = userService.register("user@gmail.com", "87654321", Set.of(userRole));
-        } catch (DataProcessingException e) {
+        } catch (AuthenticationException e) {
             System.out.println("User was added earlier");
         }
     }

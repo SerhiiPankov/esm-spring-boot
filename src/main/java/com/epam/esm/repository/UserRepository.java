@@ -13,4 +13,6 @@ public interface UserRepository {
     Optional<User> get(Object id);
 
     Page<User> getAll(List<Parameter> filterParams, Pagination pagination);
+
+    Optional<User> getByEmail(String email);
 }

@@ -7,8 +7,11 @@ import com.epam.esm.controller.UserController;
 import com.epam.esm.dto.ShoppingCartResponseDto;
 import com.epam.esm.hateoas.model.ShoppingCartModel;
 import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,18 +22,20 @@ public class ShoppingCartAssembler extends
     }
 
     @Override
-    public ShoppingCartModel toModel(ShoppingCartResponseDto shoppingCartResponseDto) {
+    public @NotNull ShoppingCartModel toModel(
+            @NotNull ShoppingCartResponseDto shoppingCartResponseDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ShoppingCartModel shoppingCartModel = new ShoppingCartModel();
         BeanUtils.copyProperties(shoppingCartResponseDto, shoppingCartModel);
 
         shoppingCartModel.add(linkTo(methodOn(UserController.class)
-                .getShoppingCartByUserId(shoppingCartResponseDto.getUserId())).withSelfRel());
+                .getShoppingCart(authentication)).withSelfRel());
         shoppingCartModel.add(linkTo(methodOn(UserController.class)
-                .completeOrder(shoppingCartResponseDto.getUserId())).withRel("complete-order"));
+                .completeOrder(authentication)).withRel("complete-order"));
         shoppingCartModel.add(linkTo(methodOn(UserController.class)
                 .getUserById(shoppingCartResponseDto.getUserId())).withRel("get-user"));
         shoppingCartModel.add(linkTo(methodOn(UserController.class)
-                .getOrdersHistoryByUserId(shoppingCartResponseDto.getUserId(),
+                .getOrdersHistory(authentication,
                         new HashMap<>())).withRel("orders-history"));
         shoppingCartModel.add(linkTo(methodOn(UserController.class)
                 .getAllUsers(new HashMap<>())).withRel("all-users"));

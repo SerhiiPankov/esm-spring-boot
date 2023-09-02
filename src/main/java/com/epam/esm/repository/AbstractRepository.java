@@ -6,6 +6,7 @@ import com.epam.esm.lib.data.Pagination;
 import com.epam.esm.lib.data.Parameter;
 import com.epam.esm.lib.data.Sort;
 import com.epam.esm.specification.SpecificationManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -23,10 +24,9 @@ public abstract class AbstractRepository<T> {
     private final Class<T> clazz;
     private final SpecificationManager<T> specificationManager;
 
-    public AbstractRepository(SessionFactory factory,
-                              Class<T> clazz,
-                              SpecificationManager<T> specificationManager) {
-        this.factory = factory;
+    protected AbstractRepository(EntityManagerFactory factory, Class<T> clazz,
+                                 SpecificationManager<T> specificationManager) {
+        this.factory = factory.unwrap(SessionFactory.class);
         this.clazz = clazz;
         this.specificationManager = specificationManager;
     }

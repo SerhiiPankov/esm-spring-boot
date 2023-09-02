@@ -11,13 +11,13 @@ import com.epam.esm.lib.data.Page;
 import com.epam.esm.mapper.MessageMapper;
 import com.epam.esm.mapper.TagMapper;
 import com.epam.esm.model.Tag;
-import com.epam.esm.model.User;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.UserService;
 import java.math.BigInteger;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,21 +55,23 @@ public class TagController {
         this.pageMetadataParser = pageMetadataParser;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public TagModel createTag(@RequestBody TagRequestDto requestDto) {
         Tag tag = tagService.create(tagMapper.mapToTag(requestDto));
         return tagModelAssembler.toModel(tagMapper.mapToTagResponseDto(tag));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{tagId}")
     public TagModel updateTag(@PathVariable BigInteger tagId,
                                  @RequestBody TagRequestDto requestDto) {
-
         return tagModelAssembler.toModel(
                 tagMapper.mapToTagResponseDto(
                         tagService.update(tagId, tagMapper.mapToTag(requestDto))));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{tagId}")
     public MessageModel deleteTag(@PathVariable BigInteger tagId) {
         tagService.delete(tagId);
@@ -86,18 +88,6 @@ public class TagController {
     @GetMapping
     public PagedModel<TagModel> getAllTags(@RequestParam Map<String, String> params) {
         Page<TagResponseDto> tagResponseDtoPage = tagMapper.mapPageDto(tagService.getAll(params));
-        return PagedModel.of(tagResponseDtoPage.getPage().stream()
-                .map(tagModelAssembler::toModel)
-                .collect(Collectors.toList()),
-                pageMetadataParser.getPageMetadata(tagResponseDtoPage));
-    }
-
-    @GetMapping("/top-tag")
-    public PagedModel<TagModel> getTopTag(@RequestParam BigInteger userId,
-                                          @RequestParam Map<String, String> params) {
-        User user = userService.get(userId);
-        Page<TagResponseDto> tagResponseDtoPage =
-                tagMapper.mapPageDto(tagService.getTopTag(user, params));
         return PagedModel.of(tagResponseDtoPage.getPage().stream()
                 .map(tagModelAssembler::toModel)
                 .collect(Collectors.toList()),

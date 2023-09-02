@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.hibernate.envers.AuditJoinTable;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -40,11 +39,10 @@ public class GiftCertificate {
     private LocalDateTime createDate;
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+    @NotAudited
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "gift_certificates_tags",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
-            inverseJoinColumns = @JoinColumn(name = "tags_id"))
-    @AuditJoinTable(name = "gift_certificates_tags_audit",
             inverseJoinColumns = @JoinColumn(name = "tags_id"))
     private List<Tag> tags;
     @NotAudited

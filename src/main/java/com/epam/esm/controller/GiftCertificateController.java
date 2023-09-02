@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +51,7 @@ public class GiftCertificateController {
         this.pageMetadataParser = pageMetadataParser;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public GiftCertificateModel createCertificate(
             @RequestBody GiftCertificateRequestDto requestDto) {
@@ -59,6 +61,7 @@ public class GiftCertificateController {
                 giftCertificateMapper.mapToGiftCertificateResponseDto(giftCertificate));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{giftCertificateId}")
     public GiftCertificateModel updateCertificate(@PathVariable BigInteger giftCertificateId,
                                              @RequestBody GiftCertificateRequestDto requestDto) {
@@ -69,6 +72,7 @@ public class GiftCertificateController {
                 certificateService.update(giftCertificate)));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{giftCertificateId}")
     public MessageModel deleteCertificate(@PathVariable BigInteger giftCertificateId) {
         certificateService.delete(giftCertificateId);

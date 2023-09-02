@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
         fieldMatch = "repeatPassword",
         message = "Passwords do not match!"
 )
-public class UserRequestDto {
+public class UserSignUpRequestDto {
     @ValidEmail
     private String email;
     @Size(min = 8, max = 40)
