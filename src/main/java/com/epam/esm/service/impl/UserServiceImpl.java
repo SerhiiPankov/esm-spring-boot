@@ -12,9 +12,6 @@ import com.epam.esm.specification.PaginationAndSortingHandler;
 import com.epam.esm.specification.ParameterParser;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,16 +68,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.getByEmail(email).orElseThrow(
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.getByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("Not found user with email: " + email));
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                user.getRoles().stream()
-                        .map(role -> new SimpleGrantedAuthority(
-                                "ROLE_" + role.getRoleName().name()))
-                        .collect(Collectors.toList())
-        );
     }
 }

@@ -1,8 +1,8 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dto.JwtResponseDto;
 import com.epam.esm.dto.OrderResponseDto;
 import com.epam.esm.dto.TagResponseDto;
+import com.epam.esm.dto.UserLoginResponseDto;
 import com.epam.esm.dto.UserResponseDto;
 import com.epam.esm.dto.UserSignInRequestDto;
 import com.epam.esm.dto.UserSignUpRequestDto;
@@ -26,8 +26,8 @@ import com.epam.esm.mapper.UserMapper;
 import com.epam.esm.model.GiftCertificate;
 import com.epam.esm.model.Role;
 import com.epam.esm.model.User;
+import com.epam.esm.security.AuthenticationService;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.JwtService;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.RoleService;
 import com.epam.esm.service.ShoppingCartService;
@@ -38,16 +38,10 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -77,51 +72,7 @@ public class UserController {
     private final ShoppingCartAssembler shoppingCartAssembler;
     private final TagModelAssembler tagModelAssembler;
     private final PageMetadataParser pageMetadataParser;
-    private final UserDetailsService userDetailsService;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-
-    public UserController(OrderService orderService,
-                          RoleService roleService,
-                          ShoppingCartService shoppingCartService,
-                          TagService tagService,
-                          UserService userService,
-                          GiftCertificateService giftCertificateService,
-                          MessageMapper messageMapper,
-                          OrderMapper orderMapper,
-                          ShoppingCartMapper shoppingCartMapper,
-                          TagMapper tagMapper,
-                          UserMapper userMapper,
-                          OrderModelAssembler orderModelAssembler,
-                          UserModelAssembler userModelAssembler,
-                          MessageModelAssembler messageModelAssembler,
-                          ShoppingCartAssembler shoppingCartAssembler,
-                          TagModelAssembler tagModelAssembler,
-                          PageMetadataParser pageMetadataParser,
-                          UserDetailsService userDetailsService,
-                          JwtService jwtService,
-                          AuthenticationManager authenticationManager) {
-        this.orderService = orderService;
-        this.roleService = roleService;
-        this.shoppingCartService = shoppingCartService;
-        this.tagService = tagService;
-        this.userService = userService;
-        this.giftCertificateService = giftCertificateService;
-        this.messageMapper = messageMapper;
-        this.orderMapper = orderMapper;
-        this.shoppingCartMapper = shoppingCartMapper;
-        this.tagMapper = tagMapper;
-        this.userMapper = userMapper;
-        this.orderModelAssembler = orderModelAssembler;
-        this.userModelAssembler = userModelAssembler;
-        this.messageModelAssembler = messageModelAssembler;
-        this.shoppingCartAssembler = shoppingCartAssembler;
-        this.tagModelAssembler = tagModelAssembler;
-        this.pageMetadataParser = pageMetadataParser;
-        this.userDetailsService = userDetailsService;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/auth/register")
     public UserModel registerUser(@RequestBody @Valid UserSignUpRequestDto userSignupRequestDto) {
@@ -133,20 +84,9 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<Object> login(
+    public UserLoginResponseDto login(
             @RequestBody @Valid UserSignInRequestDto userSigninRequestDto) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    userSigninRequestDto.getEmail(), userSigninRequestDto.getPassword()));
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(messageModelAssembler.toModel(
-                    messageMapper.mapToTagResponseDto("Can not login user")),
-                    HttpStatus.UNAUTHORIZED);
-        }
-        UserDetails userDetails = userDetailsService
-                .loadUserByUsername(userSigninRequestDto.getEmail());
-        String token = jwtService.generateToken(userDetails);
-        return new ResponseEntity<>(new JwtResponseDto(token), HttpStatus.OK);
+        return authenticationService.authenticate(userSigninRequestDto);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
