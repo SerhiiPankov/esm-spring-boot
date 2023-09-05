@@ -14,6 +14,8 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Set;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -21,6 +23,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 @Audited
 @AuditTable("users_audit")
 @Entity
