@@ -1,5 +1,7 @@
 package com.epam.esm.config;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 import com.epam.esm.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,9 +41,7 @@ public class SecurityConfiguration {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/auth/**")
-                        .permitAll()
-                        .requestMatchers("/inject")
+                        .requestMatchers(antMatcher("/users/auth/**"))
                         .permitAll()
                         .anyRequest()
                         .authenticated())

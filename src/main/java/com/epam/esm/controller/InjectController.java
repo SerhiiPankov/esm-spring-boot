@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.MessageResponseDto;
 import com.epam.esm.initializer.DataInitializer;
 import com.epam.esm.mapper.MessageMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class InjectController {
         this.messageMapper = messageMapper;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public MessageResponseDto inject() {
         dataInitializer.injectUsers();
