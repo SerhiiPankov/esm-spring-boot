@@ -1,7 +1,24 @@
 pipeline {
-agent any
+
+agent {
+     node {
+        label 'TestNode'
+   }
+}
 
 stages {
+    stage('Checkout') {
+        steps {
+            // delete all files from server TestNode
+            bat 'del /F /S /Q *.*'
+            // delete all dir from server TestNode
+            bat 'for /d %%x in (.\\*) do @rd /s /q %%x'
+            // Вывод echo в консоль Jenkins
+            echo 'step Git Checkout'
+
+            checkout scm
+        }
+    }
 
     stage('Build') {
         steps {
@@ -13,7 +30,9 @@ stages {
     stage('Deploy') {
         steps {
             // Stop Tomcat
-            bat '%CATALINA_HOME%\\shutdown.bat start'
+
+            bat 'cd %CATALINA_HOME%'
+            bat 'shutdown.bat'
 
             // Remove existing war file and deployed application
             bat "del C:/apache-tomcat/webapps/esm-0.0.1-SNAPSHOT*"

@@ -11,7 +11,7 @@
     <groupId>com.epam</groupId>
     <artifactId>esm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>esm-spring-boot</name>
     <description>esm-spring-boot</description>
     <properties>
