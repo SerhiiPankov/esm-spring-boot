@@ -6,7 +6,7 @@ stages {
     stage('Build') {
         steps {
             // Build the war file
-             sh 'mvn clean package'
+             bat 'mvn clean package'
         }
     }
 
@@ -18,26 +18,26 @@ stages {
 
         steps {
             // Stop Tomcat
-            sh '${TOMCAT_HOME}/bin/shutdown.sh'
+            bat '${TOMCAT_HOME}/bin/shutdown.sh'
 
             // Remove existing war file and deployed application
-            sh "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
+            bat "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
 
             // Copy the new war file to Tomcat webapps directory
-            sh "cp target/esm-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/myapp.war"
+            bat "cp target/esm-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/myapp.war"
 
             // Start Tomcat
-            sh "${TOMCAT_HOME}/bin/startup.sh"
+            bat "${TOMCAT_HOME}/bin/startup.sh"
         }
     }
 
     stage('Verify') {
         steps {
             // Wait for Tomcat to start
-            sh "sleep 30"
+            bat "sleep 30"
 
             // Verify if the application is deployed successfully
-            sh "curl -s http://localhost:8080/"
+            bat "curl -s http://localhost:8080/"
         }
     }
 }
@@ -45,7 +45,7 @@ stages {
 post {
     always {
         // Cleanup any leftover files after deployment
-        sh "rm -rf ${WAR_FILE}"
+        bat "rm -rf target/esm-0.0.1-SNAPSHOT.war"
     }
 }
 }
