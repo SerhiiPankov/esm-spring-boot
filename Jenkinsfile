@@ -5,14 +5,14 @@ pipeline {
             agent any
             steps {
                 echo 'Hello, Maven'
-                pwsh 'mvn -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Run') {
             agent any
             steps {
                 echo 'Hello, JDK'
-                pwsh 'java -jar target/esm-0.0.1-SNAPSHOT.jar'
+                sh 'java -jar target/esm-0.0.1-SNAPSHOT.jar'
             }
         }
     }
