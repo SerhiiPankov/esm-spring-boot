@@ -12,7 +12,7 @@ stages {
     stage('Build') {
         steps {
             // Build the war file
-             sh 'mvn clean package'
+             bat 'mvn clean package'
         }
     }
 
@@ -24,7 +24,7 @@ stages {
 
         steps {
             // Stop Tomcat
-            sh "${TOMCAT_HOME}/bin/shutdown.sh"
+            bat "${TOMCAT_HOME}/bin/shutdown.sh"
 
             // Remove existing war file and deployed application
             sh "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
