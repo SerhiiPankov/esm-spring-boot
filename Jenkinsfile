@@ -1,8 +1,8 @@
 pipeline {
-    agent none
+    agent {docker 'oraclelinux'}
     stages {
         stage('Build') {
-            agent {docker 'maven:3.8.3-openjdk-17'}
+            agent { docker 'maven:3.8.3-openjdk-17' }
             steps {
                 echo 'Hello, Maven'
                 sh 'mvn -B -DskipTests clean package'
