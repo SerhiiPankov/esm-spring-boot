@@ -27,23 +27,23 @@ stages {
             bat "${TOMCAT_HOME}/bin/shutdown.sh"
 
             // Remove existing war file and deployed application
-            sh "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
+            bat "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
 
             // Copy the new war file to Tomcat webapps directory
-            sh "cp ${JAR_FILE} ${TOMCAT_HOME}/webapps/myapp.jar"
+            bat "cp ${JAR_FILE} ${TOMCAT_HOME}/webapps/myapp.jar"
 
             // Start Tomcat
-            sh "${TOMCAT_HOME}/bin/startup.sh"
+            bat "${TOMCAT_HOME}/bin/startup.sh"
         }
     }
 
     stage('Verify') {
         steps {
             // Wait for Tomcat to start
-            sh "sleep 30"
+            bat "sleep 30"
 
             // Verify if the application is deployed successfully
-            sh "curl -s http://localhost:8080/"
+            bat "curl -s http://localhost:8080/"
         }
     }
 }
@@ -51,7 +51,7 @@ stages {
 post {
     always {
         // Cleanup any leftover files after deployment
-        sh "rm -rf ${JAR_FILE}"
+        bat "rm -rf ${JAR_FILE}"
     }
 }
 }
