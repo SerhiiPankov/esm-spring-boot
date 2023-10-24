@@ -2,7 +2,7 @@ pipeline {
     agent none
     stages {
         stage('Build') {
-            agent any
+            agent {docker 'maven:3.8.3-openjdk-17'}
             steps {
                 echo 'Hello, Maven'
                 sh 'mvn -B -DskipTests clean package'
