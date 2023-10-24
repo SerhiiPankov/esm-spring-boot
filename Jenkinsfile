@@ -13,7 +13,7 @@ stages {
     stage('Deploy') {
         steps {
             // Stop Tomcat
-            bat '%CATALINA_HOME%\\\\shutdown.bat start'
+            bat '%CATALINA_HOME%\\\shutdown.bat start'
 
             // Remove existing war file and deployed application
             bat "del C:/apache-tomcat/webapps/esm-0.0.1-SNAPSHOT*"
