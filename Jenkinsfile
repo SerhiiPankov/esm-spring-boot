@@ -6,7 +6,7 @@ stages {
     stage('Build') {
         steps {
             // Build the war file
-             sh 'mvn clean package'
+             bat 'mvn clean package'
         }
     }
 
