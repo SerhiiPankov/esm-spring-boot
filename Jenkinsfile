@@ -13,7 +13,7 @@ stages {
     stage('Deploy') {
         environment {
             TOMCAT_HOME = 'C:/apache-tomcat'
-            JAR_FILE = 'target/esm-0.0.1-SNAPSHOT.jar'
+            WAR_FILE = 'target/esm-0.0.1-SNAPSHOT.war'
         }
 
         steps {
@@ -24,7 +24,7 @@ stages {
             sh "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
 
             // Copy the new war file to Tomcat webapps directory
-            sh "cp ${JAR_FILE} ${TOMCAT_HOME}/webapps/myapp.jar"
+            sh "cp ${WAR_FILE} ${TOMCAT_HOME}/webapps/myapp.jar"
 
             // Start Tomcat
             sh "${TOMCAT_HOME}/bin/startup.sh"
@@ -45,7 +45,7 @@ stages {
 post {
     always {
         // Cleanup any leftover files after deployment
-        sh "rm -rf ${JAR_FILE}"
+        sh "rm -rf ${WAR_FILE}"
     }
 }
 }
