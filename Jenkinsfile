@@ -18,16 +18,16 @@ stages {
 
         steps {
             // Stop Tomcat
-            bat '${TOMCAT_HOME}/bin/shutdown.sh'
+            bat '${TOMCAT_HOME}/bin/shutdown.bat'
 
             // Remove existing war file and deployed application
-            bat "rm -rf ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
+            bat "del ${TOMCAT_HOME}/webapps/esm-0.0.1-SNAPSHOT*"
 
             // Copy the new war file to Tomcat webapps directory
-            bat "cp target/esm-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/myapp.war"
+            bat "copy target/esm-0.0.1-SNAPSHOT.war ${TOMCAT_HOME}/webapps/myapp.war"
 
             // Start Tomcat
-            bat "${TOMCAT_HOME}/bin/startup.sh"
+            bat "${TOMCAT_HOME}/bin/startup.bat"
         }
     }
 
