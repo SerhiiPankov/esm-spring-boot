@@ -12,7 +12,7 @@ stages {
     stage('Build') {
         steps {
             // Build the war file
-             bat 'mvn clean package'
+             bash 'mvn clean package'
         }
     }
 
