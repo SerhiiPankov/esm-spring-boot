@@ -1,5 +1,5 @@
 pipeline {
-    agent {docker 'oraclelinux'}
+    agent {docker 'oraclelinux:8-slim'}
     stages {
         stage('Build') {
             agent { docker 'maven:3.8.3-openjdk-17' }
