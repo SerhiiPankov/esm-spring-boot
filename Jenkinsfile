@@ -54,7 +54,7 @@ post {
         sh "rm -rf ${JAR_FILE}"
     }
 }
-
+}
 
 // pipeline {
 //     agent none
