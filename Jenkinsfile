@@ -1,31 +1,20 @@
-pipeline {
-    agent none
-    stages {
-        stage('SCM') {
-            checkout scm
-        }
-        stage('Build') {
-            steps {
-                echo 'Hello, Maven'
-                bat 'mvn -B -DskipTests clean package'
-            }
-        }
-        stage('Run') {
-            steps {
-                echo 'Hello, JDK'
-                bat 'java -jar target/esm-0.0.1-SNAPSHOT.jar'
-            }
-        }
+node('main') {
+    stage('checkout scm') {
+        checkout scm
     }
-//     node {
-//       stage('SCM') {
-//         checkout scm
-//       }
-//       stage('SonarQube Analysis') {
-//         def mvn = tool 'Default Maven';
-//         withSonarQubeEnv() {
-//           sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=esm_key"
-//         }
-//       }
-//     }
+
+    stage('build') {
+        sh 'mvn clean package'
+    }
+
+    stage('archive artifacts') {
+        archiveArtifacts artifacts: 'target/*.war'
+    }
+
+    stage('deployment') {
+        deploy adapters: [tomcat9(credentialsId: '', path: '', url: 'http://127.0.0.1:8080/')],
+        contextPath: 'esm',
+        war: 'target/*.war'
+    }
 }
+
