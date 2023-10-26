@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        TOMCAT_HOME = '/opt/tomcat'
+        WAR_FILE = 'target/esm-esm.war'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -17,14 +22,11 @@ pipeline {
         }
 
         stage('Deploy') {
-            environment {
-                TOMCAT_HOME = '/opt/tomcat'
-                WAR_FILE = 'target/esm-esm.war'
-            }
 
             steps {
                 // Stop Tomcat
-                sh "${TOMCAT_HOME}/bin/shutdown.sh"
+                //sh "sudo ${TOMCAT_HOME}/bin/shutdown.sh"
+                sh 'sudo systemctl start tomcat'
 
                 // Remove existing war file and deployed application
                 sh "rm -rf ${TOMCAT_HOME}/webapps/esm*"
