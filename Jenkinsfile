@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy') {
 
             steps {
-                sh 'java -jar esm-esm.jar'
+                sh 'java -jar target/esm-esm.jar'
             }
         }
     }
