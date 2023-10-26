@@ -2,21 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('checkout') {
             steps {
-                // Checkout the code repository
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('build') {
             steps {
-                // Build the war file
-                 sh 'mvn clean package'
+                 sh 'mvn clean install'
             }
         }
 
-        stage('Deploy') {
+        stage('sonarQube') {
+            steps {
+                sh 'mvn sonar:sonar'
+            }
+        }
+
+        stage('deploy') {
 
             steps {
                 sh 'java -jar target/esm-esm.jar'
