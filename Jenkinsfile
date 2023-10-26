@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Stop Tomcat
                 //sh "sudo ${TOMCAT_HOME}/bin/shutdown.sh"
-                sh 'sudo systemctl start tomcat'
+                sh 'sudo systemctl stop tomcat'
 
                 // Remove existing war file and deployed application
                 sh "rm -rf ${TOMCAT_HOME}/webapps/esm*"
