@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class EsmSpringBootApplication {
     public static void main(String[] args) {
+        System.out.println("App was started");
         SpringApplication.run(EsmSpringBootApplication.class, args);
     }
 
