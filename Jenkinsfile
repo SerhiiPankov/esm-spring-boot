@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        TOMCAT_HOME = '/opt/tomcat'
-        WAR_FILE = 'target/esm-esm.war'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -24,36 +19,8 @@ pipeline {
         stage('Deploy') {
 
             steps {
-                // Stop Tomcat
-                //sh "sudo ${TOMCAT_HOME}/bin/shutdown.sh"
-                sh 'echo \'0110dami\' | sudo -S systemctl stop tomcat'
-
-                // Remove existing war file and deployed application
-                sh "rm -rf ${TOMCAT_HOME}/webapps/esm*"
-
-                // Copy the new war file to Tomcat webapps directory
-                sh "cp ${WAR_FILE} ${TOMCAT_HOME}/webapps/esm.war"
-
-                // Start Tomcat
-                sh "${TOMCAT_HOME}/bin/startup.sh"
+                sh 'java -jar esm-esm.jar'
             }
-        }
-
-        stage('Verify') {
-            steps {
-                // Wait for Tomcat to start
-                sh "sleep 30"
-
-                // Verify if the application is deployed successfully
-                sh "curl -s http://localhost:8080/esm/"
-            }
-        }
-    }
-
-    post {
-        always {
-            // Cleanup any leftover files after deployment
-            sh "rm -rf ${WAR_FILE}"
         }
     }
 }
